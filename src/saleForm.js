@@ -31,6 +31,12 @@ class SaleForm extends React.Component {
 	    } else {
 	    	console.log('Submiting form');
 	    	console.log(this.state);
+	    	var saleData = {
+	    		field1step1: this.state.field1step1,
+	    		field1step2: this.state.field1step2,
+	    		field1step3: this.state.field1step3
+	    	};
+	    	this.props.handleNewSale(saleData);
 	    	this.props.onChangeView('DASHBOARD');
 	    }
 	};

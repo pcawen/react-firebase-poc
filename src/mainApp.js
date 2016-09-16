@@ -18,7 +18,7 @@ class MainApp extends Component {
 	      authenticated: false,
 	      currentView: 'DASHBOARD',
 	      localities: {},
-	      items: [{value: 'one', label: 'One'}]
+	      items: {value: 'one', label: 'One'}
 	    };
 	}
 
@@ -34,14 +34,20 @@ class MainApp extends Component {
 
 	handleLogOut(){
 		console.log('loged out');
-		firebase.auth().signOut().then(function() {
+		firebase.auth().signOut().then( () => {
 		  // Sign-out successful.
 		  this.setState({authenticated: false});
-		}, function(error) {
+		}, error => {
 		  // An error happened.
 		  console.log(error);
 		});
-		
+	}
+
+	handleNewSale(aSale){
+		console.log('New sale called');
+		console.log(aSale);
+		var dbRefSales = firebase.database().ref().child('sales');
+		dbRefSales.push(aSale);
 	}
 
 	/*firebase.auth().onAuthStateChanged(firebaseUser => {
@@ -58,19 +64,17 @@ class MainApp extends Component {
 	//var newArrayItems = Object.keys(items).map(key => items[key]);
 
 	componentDidMount() {
-		/*this.setState({
-			items: [{id: 'one', text: 'One'},{id: 'two', text: 'Two'}, {id: 'tree', text: 'Tree'}]
-		});*/
-		const db = firebase.database();
-		const dbRefLocalities = db.ref().child('localities');
+		var dbRefLocalities = firebase.database().ref().child('localities');
+		var dbRefSales = firebase.database().ref().child('sales');
 		dbRefLocalities.on('value', snap => {
 			console.log(snap.val());
-			//this.setState({someState: snap.val()});
-			//var arrayItems = Object.keys(snap.val()).map(key => snap.val()[key]);
-			//console.log(arrayItems);
 			this.setState({
 				items: snap.val()
 			});
+		});
+		dbRefSales.on('value', snap => {
+			console.log('>>>Sales');
+			console.log(snap.val());
 		});
 	}
 
@@ -91,7 +95,7 @@ class MainApp extends Component {
 					{this.state.currentView == 'DASHBOARD' ? (
 						<Dashboard onChangeView={this.handleCurrentView} items={this.state.items}/>
 					) : (
-						<SaleForm onChangeView={this.handleCurrentView}/>
+						<SaleForm onChangeView={this.handleCurrentView} handleNewSale={this.handleNewSale}/>
 					)}
 					</div>
 				)}
