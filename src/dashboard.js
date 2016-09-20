@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import * as firebase from 'firebase';
 //Used fot arrays
 /*class List extends Component {
   render() {
@@ -37,14 +38,30 @@ class Dashboard extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
+			items: {value: 'one', label: 'One'},
 	    };
+	}
+
+	componentDidMount() {
+		var dbRefLocalities = firebase.database().ref().child('localities');
+		var dbRefSales = firebase.database().ref().child('sales');
+		dbRefLocalities.on('value', snap => {
+			console.log(snap.val());
+			this.setState({
+				items: snap.val()
+			});
+		});
+		dbRefSales.on('child_added', snap => {
+			console.log('>>>Sales');
+			console.log(snap.val());
+		});
 	}
 
 	render() {
 		return (
 			<div>
 				<h2>Dashboard :p</h2>
-				<List items={this.props.items}/>
+				<List items={this.state.items}/>
 				<input type="button" onClick={this.props.onChangeView.bind(this,'SALE_FORM')} value="Complete form"/>
 			</div>
 		)

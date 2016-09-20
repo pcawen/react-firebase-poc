@@ -10,6 +10,7 @@ class Login extends React.Component {
 		super(props);
 		this.state = {user: props.iuser, pswd: props.ipswd};
 		this.handleSubmit = this.handleSubmit.bind(this);
+		this.handleSignUp = this.handleSignUp.bind(this);
 		this.onUserChange = this.onUserChange.bind(this);
 		this.onPswdChange = this.onPswdChange.bind(this);
 	}
@@ -34,12 +35,49 @@ class Login extends React.Component {
 	    auth.signInWithEmailAndPassword(email, pswd)
 		.then(function (data) {  
 		    console.log('Request succeeded with JSON response', data);  
-		    that.props.onUserLogedIn();
+		    that.props.onUserLogedIn(data);
 		})  
 		.catch(function (error) {  
-		    console.log('Request failed', error);  
+		    console.log('Request failed', error); 
+		    switch (error.code) {
+	      	case "auth/wrong-password":
+	      		//Maybe set a custom error message
+	        	console.log(error.message);
+	        	break;
+	      	case "auth/user-not-found":
+	        	console.log(error.message);
+	        	break;
+	      	case "auth/invalid-email":
+	        	console.log(error.message);
+	        	break;
+	      	default:
+	        	console.log("Error logging user in:", error);
+	    }
 		});
 	    //this.setState({author: '', text: ''});
+	}
+
+	handleSignUp(e) {
+		console.log('Sign up called');
+		/*var auth = firebase.auth();
+		var email = this.state.user.trim();
+    	var pswd = this.state.pswd.trim();
+    	if(!email || !pswd){
+    		return;
+    	}
+		auth().createUserWithEmailAndPassword(email, password)
+		.then(function (data) {  
+		    console.log('Request succeeded with JSON response', data);  
+		    // save the user's profile into the database so we can list users,
+		    // use them in Security and Firebase Rules, and show profiles
+		    ref.child("users").child(authData.uid).set({
+		      provider: authData.provider,
+		      name: userName
+		    });
+		})  
+		.catch(function (error) {  
+		    console.log('Request failed', error.code + ' ' error.message);  
+		});*/
 	}
 
 	render() {
@@ -73,7 +111,7 @@ class Login extends React.Component {
 			     />
 			     <div>
 	             <RaisedButton type="submit" primary={true} style={signInStyle} label="Sign in" />
-	             <FlatButton label="Sign up"/>
+	             <FlatButton label="Sign up" onClick={this.handleSignUp}/>
 	             </div>
 			</form>
 			</Paper>

@@ -14,17 +14,52 @@ class MainApp extends Component {
 	    this.handleUserLogedIn = this.handleUserLogedIn.bind(this);
 	    this.handleCurrentView = this.handleCurrentView.bind(this);
 	    this.handleLogOut = this.handleLogOut.bind(this);
+	    this.handleNewSale = this.handleNewSale.bind(this);
 	    this.state = {
 	      authenticated: false,
 	      currentView: 'DASHBOARD',
 	      localities: {},
-	      items: {value: 'one', label: 'One'}
+	      //items: {value: 'one', label: 'One'},
+	      uId: '',
+	      userName: ''
 	    };
 	}
 
-	handleUserLogedIn(){
-		console.log('Handle user loged Outer called');
+	handleUserLogedIn(user){
+		console.log('User logged in with id: ' + user.uid);
 		this.setState({authenticated: true});
+		this.setState({uId: user.uid});
+		if(user.displayName){
+			console.log('displayName: ' + user.displayName);
+			this.setState({userName: user.displayName});
+		} else {
+			console.log('User name: ' + this.getName(user));
+			this.setState({userName: this.getName(user)});
+		}
+		
+		/*var user = firebase.auth().currentUser;
+		user.updateProfile({
+		  displayName: 'Pablo',
+		  photoURL: "https://example.com/jane-q-user/profile.jpg"
+		}).then(function() {
+		  // Update successful.
+		  console.log('Update successful.');
+		}, function(error) {
+		  // An error happened.
+		  console.log('Error: ' + error);
+		});*/
+	}
+
+	getName(authData) {
+	  var provider = authData.providerData[0];
+	  switch(provider.providerId) {
+	     case 'password':
+	       return provider.email.replace(/@.*/, '');
+	     case 'twitter':
+	       return provider.displayName;
+	     case 'facebook':
+	       return provider.displayName;
+	  }
 	}
 
 	handleCurrentView(aView){
@@ -46,7 +81,7 @@ class MainApp extends Component {
 	handleNewSale(aSale){
 		console.log('New sale called');
 		console.log(aSale);
-		var dbRefSales = firebase.database().ref().child('sales');
+		var dbRefSales = firebase.database().ref().child('sales/' + this.state.uId);
 		dbRefSales.push(aSale);
 	}
 
@@ -62,8 +97,7 @@ class MainApp extends Component {
 	//var newArrayItems = Object.keys(items).map(function(key){return items[key];});
 	//ES6 way
 	//var newArrayItems = Object.keys(items).map(key => items[key]);
-
-	componentDidMount() {
+	/*componentDidMount() {
 		var dbRefLocalities = firebase.database().ref().child('localities');
 		var dbRefSales = firebase.database().ref().child('sales');
 		dbRefLocalities.on('value', snap => {
@@ -72,11 +106,11 @@ class MainApp extends Component {
 				items: snap.val()
 			});
 		});
-		dbRefSales.on('value', snap => {
+		dbRefSales.on('child_added', snap => {
 			console.log('>>>Sales');
 			console.log(snap.val());
 		});
-	}
+	}*/
 
 	render() {
 		return (
@@ -92,8 +126,9 @@ class MainApp extends Component {
 					    showMenuIconButton={false}
     					iconElementRight={<FlatButton label="Log Out" onTouchTap={this.handleLogOut}/>}
 					/>
+					<span>{this.state.userName}</span>
 					{this.state.currentView == 'DASHBOARD' ? (
-						<Dashboard onChangeView={this.handleCurrentView} items={this.state.items}/>
+						<Dashboard onChangeView={this.handleCurrentView}/>
 					) : (
 						<SaleForm onChangeView={this.handleCurrentView} handleNewSale={this.handleNewSale}/>
 					)}
