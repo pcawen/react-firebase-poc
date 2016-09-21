@@ -63,7 +63,7 @@ class Dashboard extends Component {
 	render() {
 		return (
 			<div>
-				<h2>Dashboard :p</h2>
+				<h2>Dashboard</h2>
 				<List items={this.state.items}/>
 				<input type="button" onClick={this.props.onChangeView.bind(this,'SALE_FORM')} value="Complete form"/>
 			</div>

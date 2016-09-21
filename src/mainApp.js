@@ -4,6 +4,7 @@ import AppBar from 'material-ui/AppBar';
 import FlatButton from 'material-ui/FlatButton';
 import Login from './login';
 import Dashboard from './dashboard';
+import AdminDashboard from './adminDashboard';
 import SaleForm from './saleForm';
 import * as firebase from 'firebase';
 
@@ -21,12 +22,14 @@ class MainApp extends Component {
 	      localities: {},
 	      //items: {value: 'one', label: 'One'},
 	      uId: '',
-	      userName: ''
+	      userName: '',
+	      userRole: 'a'
 	    };
 	}
 
 	handleUserLogedIn(user){
 		console.log('User logged in with id: ' + user.uid);
+		var dbRefUsers = firebase.database().ref().child('users/' + user.uid);
 		this.setState({uId: user.uid});
 		if(user.displayName){
 			console.log('displayName: ' + user.displayName);
@@ -35,8 +38,12 @@ class MainApp extends Component {
 			console.log('User name: ' + this.getName(user));
 			this.setState({userName: this.getName(user)});
 		}
-		this.setState({authenticated: true});
-		
+		dbRefUsers.on('value', snap => {
+			console.log('>>>Current user data:');
+			console.log(snap.val());
+			this.setState({userRole: snap.val().role, authenticated: true});
+		});
+
 		/*var user = firebase.auth().currentUser;
 		user.updateProfile({
 		  displayName: 'Pablo',
@@ -127,11 +134,20 @@ class MainApp extends Component {
     					iconElementRight={<FlatButton label="Log Out" onTouchTap={this.handleLogOut}/>}
 					/>
 					<span>{this.state.userName}</span>
-					{this.state.currentView == 'DASHBOARD' ? (
-						<Dashboard onChangeView={this.handleCurrentView} uId={this.state.uId}/>
-					) : (
-						<SaleForm onChangeView={this.handleCurrentView} handleNewSale={this.handleNewSale}/>
-					)}
+					{(
+						() => {
+							if(this.state.currentView === 'DASHBOARD') {
+								if(this.state.userRole === 'a') {
+									return (<AdminDashboard onChangeView={this.handleCurrentView} uId={this.state.uId}/>)
+								} else {
+									return (<Dashboard onChangeView={this.handleCurrentView} uId={this.state.uId}/>)
+								}
+							} else {
+								return (<SaleForm onChangeView={this.handleCurrentView} handleNewSale={this.handleNewSale}/>)
+							}
+							
+						}	
+					)()}
 					</div>
 				)}
 			</div>

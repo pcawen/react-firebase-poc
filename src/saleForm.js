@@ -105,7 +105,7 @@ class SaleForm extends React.Component {
 	        >
 	          <Step>
 	            <StepButton onTouchTap={() => this.setState({stepIndex: 0})}>
-	              Select campaign settings
+	              Step one
 	            </StepButton>
 	            <StepContent>
 	              <p>
@@ -122,7 +122,7 @@ class SaleForm extends React.Component {
 	          </Step>
 	          <Step>
 	            <StepButton onTouchTap={() => this.setState({stepIndex: 1})}>
-	              Create an ad group
+	              Step two
 	            </StepButton>
 	            <StepContent>
 	              <p>Content of step 2.</p>
@@ -137,7 +137,7 @@ class SaleForm extends React.Component {
 	          </Step>
 	          <Step>
 	            <StepButton onTouchTap={() => this.setState({stepIndex: 2})}>
-	              Create an ad
+	              Step tree
 	            </StepButton>
 	            <StepContent>
 	              <p>

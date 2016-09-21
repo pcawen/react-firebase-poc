@@ -53,6 +53,9 @@ class Login extends React.Component {
 	        case "auth/email-already-in-use":
 	        	console.log(error.message);
 	        	break;
+	        case "auth/network-request-failed":
+	        	console.log(error.message);
+	        	break;
 	      	default:
 	        	console.log("Error logging user in:", error);
 	    }

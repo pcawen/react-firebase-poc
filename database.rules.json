@@ -1,6 +1,18 @@
 {
   "rules": {
-    ".read": "auth != null",
-    ".write": "auth != null"
+    "users": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "localities": {
+      ".read": "auth != null"
+    },
+    "sales": {
+      ".read": "root.child('users/' + auth.uid + '/role').val() == 'a'",
+      "$uid": {
+        ".read": "$uid === auth.uid",
+        ".write": "$uid === auth.uid"
+      }
+    }
   }
 }
