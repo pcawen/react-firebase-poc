@@ -50,6 +50,9 @@ class Login extends React.Component {
 	      	case "auth/invalid-email":
 	        	console.log(error.message);
 	        	break;
+	        case "auth/email-already-in-use":
+	        	console.log(error.message);
+	        	break;
 	      	default:
 	        	console.log("Error logging user in:", error);
 	    }
@@ -59,25 +62,26 @@ class Login extends React.Component {
 
 	handleSignUp(e) {
 		console.log('Sign up called');
-		/*var auth = firebase.auth();
+		var auth = firebase.auth();
+		var dbRefUsers = firebase.database().ref().child('users');
 		var email = this.state.user.trim();
     	var pswd = this.state.pswd.trim();
     	if(!email || !pswd){
     		return;
     	}
-		auth().createUserWithEmailAndPassword(email, password)
+		auth.createUserWithEmailAndPassword(email, pswd)
 		.then(function (data) {  
 		    console.log('Request succeeded with JSON response', data);  
 		    // save the user's profile into the database so we can list users,
 		    // use them in Security and Firebase Rules, and show profiles
-		    ref.child("users").child(authData.uid).set({
-		      provider: authData.provider,
-		      name: userName
+		    dbRefUsers.child(data.uid).set({
+		      name: 'HarcodedUserName',
+		      role: 'u'
 		    });
 		})  
 		.catch(function (error) {  
-		    console.log('Request failed', error.code + ' ' error.message);  
-		});*/
+		    console.log('Request failed', error.code + ' ' + error.message);  
+		});
 	}
 
 	render() {

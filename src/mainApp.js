@@ -27,7 +27,6 @@ class MainApp extends Component {
 
 	handleUserLogedIn(user){
 		console.log('User logged in with id: ' + user.uid);
-		this.setState({authenticated: true});
 		this.setState({uId: user.uid});
 		if(user.displayName){
 			console.log('displayName: ' + user.displayName);
@@ -36,6 +35,7 @@ class MainApp extends Component {
 			console.log('User name: ' + this.getName(user));
 			this.setState({userName: this.getName(user)});
 		}
+		this.setState({authenticated: true});
 		
 		/*var user = firebase.auth().currentUser;
 		user.updateProfile({
@@ -128,7 +128,7 @@ class MainApp extends Component {
 					/>
 					<span>{this.state.userName}</span>
 					{this.state.currentView == 'DASHBOARD' ? (
-						<Dashboard onChangeView={this.handleCurrentView}/>
+						<Dashboard onChangeView={this.handleCurrentView} uId={this.state.uId}/>
 					) : (
 						<SaleForm onChangeView={this.handleCurrentView} handleNewSale={this.handleNewSale}/>
 					)}
