@@ -34,7 +34,8 @@ class SaleForm extends React.Component {
 	    	var saleData = {
 	    		field1step1: this.state.field1step1,
 	    		field1step2: this.state.field1step2,
-	    		field1step3: this.state.field1step3
+	    		field1step3: this.state.field1step3,
+	    		done: false
 	    	};
 	    	this.props.handleNewSale(saleData);
 	    	this.props.onChangeView('DASHBOARD');

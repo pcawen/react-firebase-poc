@@ -3,73 +3,55 @@ import * as firebase from 'firebase';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import Toggle from 'material-ui/Toggle';
 
-class List extends Component {
+class SalesTable extends Component {
+  handleDoneState(e) {
+    console.log('done state handler called');
+    console.log(e);
+  }
+
   render() {
-  	return(
-  		<ul>
-	    {Object.keys(this.props.items).map(key => {
-	    	return <li key={key}>{this.props.items[key]}</li>;
-	    })}
-	    </ul>
+    return (
+      <Table>
+        <TableHeader 
+          displaySelectAll={false}
+          adjustForCheckbox={false}>
+          <TableRow>
+            {/*<TableHeaderColumn>ID</TableHeaderColumn>*/}
+            <TableHeaderColumn>ID</TableHeaderColumn>
+            <TableHeaderColumn>Field1</TableHeaderColumn>
+            <TableHeaderColumn>Field2</TableHeaderColumn>
+            <TableHeaderColumn>Field3</TableHeaderColumn>
+            <TableHeaderColumn>Done</TableHeaderColumn>
+          </TableRow>
+        </TableHeader>
+        <TableBody displayRowCheckbox={false}>
+          {this.props.sales.map( (row, index) => (
+            <TableRow key={index}>
+              {/*<TableRowColumn>{index}</TableRowColumn>*/}
+              <TableRowColumn>{index}</TableRowColumn>
+              <TableRowColumn>{row.field1step1}</TableRowColumn>
+              <TableRowColumn>{row.field1step2}</TableRowColumn>
+              <TableRowColumn>{row.field1step3}</TableRowColumn>
+              <TableRowColumn>
+                <Toggle toggled={row.done} onToggle={this.handleDoneState(index)}/>
+              </TableRowColumn>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     )
   }
 }
 
-const TableExampleSimple = () => (
-  <Table>
-    <TableHeader 
-      displaySelectAll={false}
-      adjustForCheckbox={false}>
-      <TableRow>
-        <TableHeaderColumn>ID</TableHeaderColumn>
-        <TableHeaderColumn>Name</TableHeaderColumn>
-        <TableHeaderColumn>Status</TableHeaderColumn>
-        <TableHeaderColumn>Done</TableHeaderColumn>
-      </TableRow>
-    </TableHeader>
-    <TableBody displayRowCheckbox={false}>
-      <TableRow>
-        <TableRowColumn>1</TableRowColumn>
-        <TableRowColumn>John Smith</TableRowColumn>
-        <TableRowColumn>Employed</TableRowColumn>
-        <TableRowColumn>
-          <Toggle/>
-        </TableRowColumn>
-      </TableRow>
-      <TableRow>
-        <TableRowColumn>2</TableRowColumn>
-        <TableRowColumn>Randal White</TableRowColumn>
-        <TableRowColumn>Unemployed</TableRowColumn>
-        <TableRowColumn>
-          <Toggle/>
-        </TableRowColumn>
-      </TableRow>
-      <TableRow>
-        <TableRowColumn>3</TableRowColumn>
-        <TableRowColumn>Stephanie Sanders</TableRowColumn>
-        <TableRowColumn>Employed</TableRowColumn>
-        <TableRowColumn>
-          <Toggle/>
-        </TableRowColumn>
-      </TableRow>
-      <TableRow>
-        <TableRowColumn>4</TableRowColumn>
-        <TableRowColumn>Steve Brown</TableRowColumn>
-        <TableRowColumn>Employed</TableRowColumn>
-        <TableRowColumn>
-          <Toggle/>
-        </TableRowColumn>
-      </TableRow>
-    </TableBody>
-  </Table>
-);
-
 class AdminDashboard extends Component {
 	constructor(props){
 		super(props);
+    this.handleDoneState = this.handleDoneState.bind(this);
 		this.state = {
-			sales: {},
-	    };
+			sales: [],
+      done1: false,
+      done2: false
+	  };
 	}
 
 	componentDidMount() {
@@ -77,17 +59,44 @@ class AdminDashboard extends Component {
 		dbRefAllSales.on('value', snap => {
 			console.log('>>>All Sales');
 			console.log(snap.val());
+      let data = snap.val();
+      let salesArray = [];
+      for (var prop in data) {
+        for (var prop1 in data[prop]) {
+          salesArray.push(data[prop][prop1]);
+        }
+      }
+      console.table(salesArray);
 			this.setState({
-				sales: snap.val()
+				sales: salesArray
 			});
 		});
 	}
+
+  handleDoneState(i) {
+    console.log('> done state handler called');
+    console.log(i);
+    switch (i) {
+      case 1:
+        this.setState({
+          done1: !this.state.done1
+        });
+        break;
+      case 2:
+        this.setState({
+          done2: !this.state.done2
+        });
+        break;
+    }
+  }
 
 	render() {
 		return (
 			<div>
 				<h2>Admin Dashboard</h2>
-				<TableExampleSimple/>
+        <Toggle toggled={this.state.done1} onToggle={() => this.handleDoneState(1)}/>
+        <Toggle toggled={this.state.done2} onToggle={() => this.handleDoneState(2)}/>
+				<SalesTable sales={this.state.sales}/>
 			</div>
 		)
 	}
