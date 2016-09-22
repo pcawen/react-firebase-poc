@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import * as firebase from 'firebase';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
+import Toggle from 'material-ui/Toggle';
 
 class List extends Component {
   render() {
@@ -16,33 +17,48 @@ class List extends Component {
 
 const TableExampleSimple = () => (
   <Table>
-    <TableHeader>
+    <TableHeader 
+      displaySelectAll={false}
+      adjustForCheckbox={false}>
       <TableRow>
         <TableHeaderColumn>ID</TableHeaderColumn>
         <TableHeaderColumn>Name</TableHeaderColumn>
         <TableHeaderColumn>Status</TableHeaderColumn>
+        <TableHeaderColumn>Done</TableHeaderColumn>
       </TableRow>
     </TableHeader>
-    <TableBody>
+    <TableBody displayRowCheckbox={false}>
       <TableRow>
         <TableRowColumn>1</TableRowColumn>
         <TableRowColumn>John Smith</TableRowColumn>
         <TableRowColumn>Employed</TableRowColumn>
+        <TableRowColumn>
+          <Toggle/>
+        </TableRowColumn>
       </TableRow>
       <TableRow>
         <TableRowColumn>2</TableRowColumn>
         <TableRowColumn>Randal White</TableRowColumn>
         <TableRowColumn>Unemployed</TableRowColumn>
+        <TableRowColumn>
+          <Toggle/>
+        </TableRowColumn>
       </TableRow>
       <TableRow>
         <TableRowColumn>3</TableRowColumn>
         <TableRowColumn>Stephanie Sanders</TableRowColumn>
         <TableRowColumn>Employed</TableRowColumn>
+        <TableRowColumn>
+          <Toggle/>
+        </TableRowColumn>
       </TableRow>
       <TableRow>
         <TableRowColumn>4</TableRowColumn>
         <TableRowColumn>Steve Brown</TableRowColumn>
         <TableRowColumn>Employed</TableRowColumn>
+        <TableRowColumn>
+          <Toggle/>
+        </TableRowColumn>
       </TableRow>
     </TableBody>
   </Table>
@@ -72,7 +88,6 @@ class AdminDashboard extends Component {
 			<div>
 				<h2>Admin Dashboard</h2>
 				<TableExampleSimple/>
-				<input type="button" onClick={this.props.onChangeView.bind(this,'SALE_FORM')} value="Complete form"/>
 			</div>
 		)
 	}

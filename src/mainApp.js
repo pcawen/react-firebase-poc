@@ -138,7 +138,7 @@ class MainApp extends Component {
 						() => {
 							if(this.state.currentView === 'DASHBOARD') {
 								if(this.state.userRole === 'a') {
-									return (<AdminDashboard onChangeView={this.handleCurrentView} uId={this.state.uId}/>)
+									return (<AdminDashboard/>)
 								} else {
 									return (<Dashboard onChangeView={this.handleCurrentView} uId={this.state.uId}/>)
 								}
