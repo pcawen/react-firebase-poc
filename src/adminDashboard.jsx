@@ -1,12 +1,45 @@
 import React, { Component } from 'react';
+import update from 'react-addons-update';
 import * as firebase from 'firebase';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import Toggle from 'material-ui/Toggle';
 
 class SalesTable extends Component {
-  handleDoneState(e) {
+  constructor(props){
+    super(props);
+    this.handleDoneState = this.handleDoneState.bind(this);
+    this.state = {
+      /*sales: [],
+      done1: false,
+      done2: false*/
+    };
+  }
+
+  handleDoneState(index) {
     console.log('done state handler called');
-    console.log(e);
+    console.log(index);
+    let originalTicket = {
+      company: 'Dalta',
+      flightNo: '0990',
+      departure: {
+        airport: 'LAS',
+        time: '2016-08-21T10:00:00.000Z'
+      },
+      arrival: {
+        airport: 'MIA',
+        time: '2016-08-21T14:41:10.000Z'
+      },
+      codeshare: [
+        {company:'GL', flightNo:'9840'},
+        {company:'TM', flightNo:'5010'}
+      ]
+    };
+    let newTicket = update(originalTicket, {
+                      arrival: {
+                        airport: {$set: 'MCO'}
+                      }
+                    });
+    console.log(newTicket);
   }
 
   render() {
@@ -33,7 +66,7 @@ class SalesTable extends Component {
               <TableRowColumn>{row.field1step2}</TableRowColumn>
               <TableRowColumn>{row.field1step3}</TableRowColumn>
               <TableRowColumn>
-                <Toggle toggled={row.done} onToggle={this.handleDoneState(index)}/>
+                <Toggle toggled={row.done} onToggle={() => this.handleDoneState(index)}/>
               </TableRowColumn>
             </TableRow>
           ))}
