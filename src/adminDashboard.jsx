@@ -9,37 +9,18 @@ class SalesTable extends Component {
     super(props);
     this.handleDoneState = this.handleDoneState.bind(this);
     this.state = {
-      /*sales: [],
-      done1: false,
-      done2: false*/
+      sales: []
     };
   }
 
+  //Updates curren component state when parent props changes
+  componentWillReceiveProps(nextProps) {
+      this.setState({ sales: nextProps.sales });
+  }
+
   handleDoneState(index) {
-    console.log('done state handler called');
-    console.log(index);
-    let originalTicket = {
-      company: 'Dalta',
-      flightNo: '0990',
-      departure: {
-        airport: 'LAS',
-        time: '2016-08-21T10:00:00.000Z'
-      },
-      arrival: {
-        airport: 'MIA',
-        time: '2016-08-21T14:41:10.000Z'
-      },
-      codeshare: [
-        {company:'GL', flightNo:'9840'},
-        {company:'TM', flightNo:'5010'}
-      ]
-    };
-    let newTicket = update(originalTicket, {
-                      arrival: {
-                        airport: {$set: 'MCO'}
-                      }
-                    });
-    console.log(newTicket);
+    let updatedSale = update(this.state.sales, {[index]: {done: {$set: true}}});
+    this.setState({sales: updatedSale});
   }
 
   render() {
@@ -58,7 +39,7 @@ class SalesTable extends Component {
           </TableRow>
         </TableHeader>
         <TableBody displayRowCheckbox={false}>
-          {this.props.sales.map( (row, index) => (
+          {this.state.sales.map( (row, index) => (
             <TableRow key={index}>
               {/*<TableRowColumn>{index}</TableRowColumn>*/}
               <TableRowColumn>{index}</TableRowColumn>
@@ -79,11 +60,8 @@ class SalesTable extends Component {
 class AdminDashboard extends Component {
 	constructor(props){
 		super(props);
-    this.handleDoneState = this.handleDoneState.bind(this);
 		this.state = {
-			sales: [],
-      done1: false,
-      done2: false
+			sales: []
 	  };
 	}
 
@@ -106,29 +84,10 @@ class AdminDashboard extends Component {
 		});
 	}
 
-  handleDoneState(i) {
-    console.log('> done state handler called');
-    console.log(i);
-    switch (i) {
-      case 1:
-        this.setState({
-          done1: !this.state.done1
-        });
-        break;
-      case 2:
-        this.setState({
-          done2: !this.state.done2
-        });
-        break;
-    }
-  }
-
 	render() {
 		return (
 			<div>
 				<h2>Admin Dashboard</h2>
-        <Toggle toggled={this.state.done1} onToggle={() => this.handleDoneState(1)}/>
-        <Toggle toggled={this.state.done2} onToggle={() => this.handleDoneState(2)}/>
 				<SalesTable sales={this.state.sales}/>
 			</div>
 		)

@@ -18,12 +18,13 @@ class MainApp extends Component {
 	    this.handleNewSale = this.handleNewSale.bind(this);
 	    this.state = {
 	      authenticated: false,
+	      //authenticated: true,
 	      currentView: 'DASHBOARD',
 	      localities: {},
 	      //items: {value: 'one', label: 'One'},
 	      uId: '',
 	      userName: '',
-	      userRole: 'a'
+	      userRole: 'u'
 	    };
 	}
 
