@@ -78,7 +78,6 @@ class Dashboard extends Component {
 	render() {
 		return (
 			<div>
-				<h2>Dashboard</h2>
 				{/*<List items={this.state.items}/>*/}
 				<Table>
 		          <TableHeader 

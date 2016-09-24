@@ -87,7 +87,6 @@ class AdminDashboard extends Component {
 	render() {
 		return (
 			<div>
-				<h2>Admin Dashboard</h2>
 				<SalesTable sales={this.state.sales}/>
 			</div>
 		)
