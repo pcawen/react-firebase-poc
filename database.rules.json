@@ -9,6 +9,7 @@
     },
     "sales": {
       ".read": "root.child('users/' + auth.uid + '/role').val() == 'a'",
+      ".write": "root.child('users/' + auth.uid + '/role').val() == 'a'",
       "$uid": {
         ".read": "$uid === auth.uid",
         ".write": "$uid === auth.uid"

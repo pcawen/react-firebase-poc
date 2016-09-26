@@ -24,7 +24,7 @@ class MainApp extends Component {
 	      //items: {value: 'one', label: 'One'},
 	      uId: '',
 	      userName: '',
-	      userRole: 'u'
+	      userRole: 'u'//'a'
 	    };
 	}
 

@@ -19,8 +19,13 @@ class SalesTable extends Component {
   }
 
   handleDoneState(index) {
-    let updatedSale = update(this.state.sales, {[index]: {done: {$set: true}}});
-    this.setState({sales: updatedSale});
+    console.log('current state');
+    console.log(this.state.sales[index].done);
+    let updatedSales = update(this.state.sales, {[index]: {done: {$set: !this.state.sales[index].done}}});
+    this.setState({sales: updatedSales});
+    let updatedSale = updatedSales[index];
+    var dbRefUpdateDone = firebase.database().ref().child('sales/' + updatedSale.userId + '/' + updatedSale.saleId + '/done');
+    dbRefUpdateDone.set(updatedSale.done);
   }
 
   render() {
@@ -74,7 +79,10 @@ class AdminDashboard extends Component {
       let salesArray = [];
       for (var prop in data) {
         for (var prop1 in data[prop]) {
-          salesArray.push(data[prop][prop1]);
+          let aSale = data[prop][prop1];
+          aSale.userId = prop;
+          aSale.saleId = prop1;
+          salesArray.push(aSale);
         }
       }
       console.table(salesArray);

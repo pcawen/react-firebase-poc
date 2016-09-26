@@ -8,6 +8,9 @@ import {
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
+import DatePicker from 'material-ui/DatePicker';
+import DropDownMenu from 'material-ui/DropDownMenu';
+import MenuItem from 'material-ui/MenuItem';
 
 class SaleForm extends React.Component {
 	constructor(props){
@@ -117,7 +120,12 @@ class SaleForm extends React.Component {
 			      	floatingLabelText="Field 1"
 			      	onChange={ this.onField1Step1Change }
 	                value={this.state.field1step1}
-			     />
+			      />
+			      <DatePicker
+			        floatingLabelText="Select a date"
+			        autoOk={true}
+			        disableYearSelection={false}
+			      />
 	              {this.renderStepActions(0)}
 	            </StepContent>
 	          </Step>

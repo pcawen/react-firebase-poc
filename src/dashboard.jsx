@@ -43,23 +43,22 @@ class Dashboard extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
-			items: {value: 'one', label: 'One'},
+			//items: {},
 			sales: []
 	    };
 	}
 
 	componentDidMount() {
-	  console.log('Component mounted');
 	  console.log(this.props);
 	  console.log(this.props.uId);
-	  var dbRefLocalities = firebase.database().ref().child('localities');
+	  //var dbRefLocalities = firebase.database().ref().child('localities');
 	  var dbRefSales = firebase.database().ref().child('sales/' + this.props.uId);
-	  dbRefLocalities.on('value', snap => {
+	  /*dbRefLocalities.on('value', snap => {
 	  	console.log(snap.val());
 	  	this.setState({
 	  		items: snap.val()
 	  	});
-	  });
+	  });*/
 	  dbRefSales.on('value', snap => {
 	    console.log('>>>Sales');
         console.log(snap.val());
